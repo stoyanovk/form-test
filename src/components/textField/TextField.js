@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { StyledLabel, AreaStyled, ErrMessage } from "./style";
 
 export default function TextField({
@@ -31,11 +31,11 @@ export default function TextField({
   };
   const handleCheck = () => {
     if (checkFunc !== undefined) {
-      !checkFunc(value)&&setErrors((errors => {
-        return [...errors,name];
-      }))
+      !checkFunc(value) &&
+        setErrors(errors => {
+          return [...errors, name];
+        });
       setErr(!checkFunc(value));
-
     }
   };
   let clsName = "form-control w-100 mt-2";
@@ -44,8 +44,9 @@ export default function TextField({
     clsName += " is-invalid";
   }
 
-  if (textArea) {
-    return (
+  return useMemo(() => {
+    console.log("render");
+    return textArea ? (
       <div className="form-group w-100">
         <StyledLabel>
           {inputLabel}
@@ -61,24 +62,24 @@ export default function TextField({
           <ErrMessage className="form-text">{errMessage}</ErrMessage>
         </StyledLabel>
       </div>
+    ) : (
+      <div className="form-group w-100">
+        <StyledLabel>
+          {inputLabel}
+          {required ? <span className="text-danger">*</span> : null}
+          <input
+            type="text"
+            name={name}
+            className={clsName}
+            placeholder={placeholder}
+            value={value}
+            onChange={handleChangeVal}
+            onBlur={handleCheck}
+          />
+        </StyledLabel>
+        <ErrMessage className="form-text">{errMessage}</ErrMessage>
+      </div>
     );
-  }
-  return (
-    <div className="form-group w-100">
-      <StyledLabel>
-        {inputLabel}
-        {required ? <span className="text-danger">*</span> : null}
-        <input
-          type="text"
-          name={name}
-          className={clsName}
-          placeholder={placeholder}
-          value={value}
-          onChange={handleChangeVal}
-          onBlur={handleCheck}
-        />
-      </StyledLabel>
-      <ErrMessage className="form-text">{errMessage}</ErrMessage>
-    </div>
-  );
+  }, [clsName, errMessage, inputLabel, name, placeholder, required, value]);
 }
+

@@ -20,12 +20,11 @@ export default function Form() {
     setState(prevState => ({ ...prevState, [name]: value }));
   };
 
-  
   const handleSubmit = async e => {
     e.preventDefault();
 
     let syncErr = [];
-    const { name, ...rest } = state
+    const { name, ...rest } = state;
 
     for (let key in rest) {
       if (state[key] === "") {
@@ -33,8 +32,8 @@ export default function Form() {
         setErrors(prevState => [...prevState, key]);
       }
     }
-    
-    (syncErr.length === 0 && errors.length === 0 )&& console.log(state);
+
+    syncErr.length === 0 && errors.length === 0 && console.log(state);
   };
 
   return (
