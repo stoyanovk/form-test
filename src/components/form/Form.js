@@ -20,25 +20,19 @@ export default function Form() {
     setState(prevState => ({ ...prevState, [name]: value }));
   };
 
-  const isValidateField = () => {
+  
+  const handleSubmit = async e => {
+    e.preventDefault();
+
     let syncErr = [];
     const { name, ...rest } = state
 
     for (let key in rest) {
-      syncErr.push();
       if (state[key] === "") {
         syncErr.push(key);
         setErrors(prevState => [...prevState, key]);
       }
     }
-
-    return setErrors
-  }
-
-  const handleSubmit = async e => {
-    e.preventDefault();
-
-    let syncErr = isValidateField()
     
     (syncErr.length === 0 && errors.length === 0 )&& console.log(state);
   };
